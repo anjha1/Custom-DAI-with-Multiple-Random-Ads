@@ -5,7 +5,7 @@
   <title>🎥 Custom DAI with Multiple Random Ads</title>
 </head>
 <body>
-  <h2>🎬 Movie with Random Ads Every 5 Minutes</h2>
+  <h2>🎬 Movie with Random Ads Every 20 seconds</h2>
 
   <video id="mainVideo" width="720" controls autoplay></video>
   <video id="adVideo" width="720" style="display:none;" autoplay muted></video>
@@ -20,7 +20,7 @@
     // List of ad videos
     const ads = ["ad1.mp4", "ad2.mp4"];
 
-    let adInterval = 20; // 5 minutes in seconds
+    let adInterval = 20; 
     let nextAdTime = adInterval;
     let resumeTime = 0;
 
