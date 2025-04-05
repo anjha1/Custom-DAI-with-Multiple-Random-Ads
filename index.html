@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>🎥 Custom DAI with Multiple Random Ads</title>
+</head>
+<body>
+  <h2>🎬 Movie with Random Ads Every 5 Minutes</h2>
+
+  <video id="mainVideo" width="720" controls autoplay></video>
+  <video id="adVideo" width="720" style="display:none;" autoplay muted></video>
+
+  <script>
+    const mainVideo = document.getElementById('mainVideo');
+    const adVideo = document.getElementById('adVideo');
+
+    // Main movie
+    mainVideo.src = "video.mp4";
+
+    // List of ad videos
+    const ads = ["ad1.mp4", "ad2.mp4"];
+
+    let adInterval = 20; // 5 minutes in seconds
+    let nextAdTime = adInterval;
+    let resumeTime = 0;
+
+    // Every second, check if it's time to play an ad
+    let checker = setInterval(() => {
+      if (mainVideo.currentTime >= nextAdTime) {
+        playRandomAd();
+        nextAdTime += adInterval; // schedule next ad
+      }
+    }, 1000);
+
+    function playRandomAd() {
+      resumeTime = mainVideo.currentTime;
+
+      // Pick a random ad
+      const randomIndex = Math.floor(Math.random() * ads.length);
+      const selectedAd = ads[randomIndex];
+
+      // Pause main video
+      mainVideo.pause();
+      mainVideo.style.display = 'none';
+
+      // Play selected ad
+      adVideo.src = selectedAd;
+      adVideo.style.display = 'block';
+      adVideo.play();
+    }
+
+    adVideo.addEventListener('ended', () => {
+      // Hide ad and resume movie
+      adVideo.style.display = 'none';
+      mainVideo.style.display = 'block';
+      mainVideo.currentTime = resumeTime;
+      mainVideo.play();
+    });
+  </script>
+</body>
+</html>
