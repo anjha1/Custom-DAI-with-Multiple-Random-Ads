@@ -2,10 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>🎥 Custom DAI with Multiple Random Ads</title>
+  <title>🎬 Smart Ad Insertion</title>
 </head>
 <body>
-  <h2>🎬 Movie with Random Ads Every 20 seconds</h2>
+  <h2>🎞️ Movie with Accurate Random Ads Every 20 seconds Watch-Time</h2>
 
   <video id="mainVideo" width="720" controls autoplay></video>
   <video id="adVideo" width="720" style="display:none;" autoplay muted></video>
@@ -14,48 +14,72 @@
     const mainVideo = document.getElementById('mainVideo');
     const adVideo = document.getElementById('adVideo');
 
-    // Main movie
-    mainVideo.src = "video.mp4";
-
-    // List of ad videos
     const ads = ["ad1.mp4", "ad2.mp4"];
 
-    let adInterval = 20; 
-    let nextAdTime = adInterval;
-    let resumeTime = 0;
+    mainVideo.src = "video.mp4";
 
-    // Every second, check if it's time to play an ad
-    let checker = setInterval(() => {
-      if (mainVideo.currentTime >= nextAdTime) {
-        playRandomAd();
-        nextAdTime += adInterval; // schedule next ad
-      }
-    }, 1000);
+    let watchTime = 0; 
+    const adAfter = 20; 
+
+    let resumeTime = 0;
+    let lastAdAt = 0;
+    let watchInterval;
+
+    // When video is playing, count watch time
+    mainVideo.addEventListener('play', () => {
+      watchInterval = setInterval(() => {
+        watchTime++;
+        if (watchTime - lastAdAt >= adAfter) {
+          lastAdAt = watchTime;
+          playRandomAd();
+        }
+      }, 1000);
+    });
+
+    // Stop counter when paused
+    mainVideo.addEventListener('pause', () => {
+      clearInterval(watchInterval);
+    });
 
     function playRandomAd() {
       resumeTime = mainVideo.currentTime;
 
-      // Pick a random ad
+      // Pick random ad
       const randomIndex = Math.floor(Math.random() * ads.length);
       const selectedAd = ads[randomIndex];
 
-      // Pause main video
+      // Hide main video, show ad
       mainVideo.pause();
       mainVideo.style.display = 'none';
 
-      // Play selected ad
       adVideo.src = selectedAd;
       adVideo.style.display = 'block';
       adVideo.play();
     }
 
     adVideo.addEventListener('ended', () => {
-      // Hide ad and resume movie
       adVideo.style.display = 'none';
       mainVideo.style.display = 'block';
+
       mainVideo.currentTime = resumeTime;
       mainVideo.play();
     });
   </script>
+  <script>
+    window.watsonAssistantChatOptions = {
+      integrationID: "33e8634c-c6ab-4f20-b1b4-2c8923060449", // The ID of this integration.
+      region: "au-syd", // The region your integration is hosted in.
+      serviceInstanceID: "9956602b-0c5c-4cba-8771-3088b454c8cb", // The ID of your service instance.
+      onLoad: async (instance) => { await instance.render(); }
+    };
+    setTimeout(function(){
+      const t=document.createElement('script');
+      t.src="https://web-chat.global.assistant.watson.appdomain.cloud/versions/" + (window.watsonAssistantChatOptions.clientVersion || 'latest') + "/WatsonAssistantChatEntry.js";
+      document.head.appendChild(t);
+    });
+  </script>
+   <footer>
+     Developed by <a href="https://anjha1.github.io/portfolio-Projects/">ACHHUTA NAND JHA</a>
+</footer>
 </body>
 </html>
